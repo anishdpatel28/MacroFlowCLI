@@ -1,0 +1,106 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, darwin, windows]
+        goarch: [amd64, arm64]
+        exclude:
+          - goos: windows
+            goarch: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Get dependencies
+      working-directory: ./MacroFlowCli
+      run: |
+        go mod download
+        go mod verify
+
+    - name: Build
+      working-directory: ./MacroFlowCli
+      env:
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+      run: |
+        OUTPUT_NAME=macro-${{ matrix.goos }}-${{ matrix.goarch }}
+        if [ "${{ matrix.goos }}" = "windows" ]; then
+          OUTPUT_NAME="${OUTPUT_NAME}.exe"
+        fi
+        go build -v -ldflags="-s -w" -o $OUTPUT_NAME main.go
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: macro-${{ matrix.goos }}-${{ matrix.goarch }}
+        path: MacroFlowCli/macro-*
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Run tests
+      working-directory: ./MacroFlowCli
+      run: go test -v ./...
+
+    - name: Run go vet
+      working-directory: ./MacroFlowCli
+      run: go vet ./...
+
+    - name: Run go fmt
+      working-directory: ./MacroFlowCli
+      run: |
+        if [ -n "$(gofmt -l .)" ]; then
+          echo "Go code is not formatted:"
+          gofmt -d .
+          exit 1
+        fi
+
+  release:
+    name: Create Release
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./artifacts
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./artifacts/**/*
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
