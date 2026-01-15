@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -22,21 +23,24 @@ Quotes are important for commands with spaces or special characters.`,
   macro add dev "npm run dev"
   macro add test "npm test"
 
-  # With single parameter
-  macro add goto "cd $1"
-  macro add kill "kill -9 $1"
-
+  # With parameters (escape $ or use interactive mode)
+  macro add goto "cd \$1"
+  macro add kill "kill -9 \$1"
+  
+  # Interactive mode (no shell expansion!)
+  macro add goto
+  # Then type: cd $1
+  
   # With multiple parameters
-  macro add copy "cp $1 $2"
+  macro add copy "cp \$1 \$2"
   
   # With all parameters
-  macro add commit "git commit -m \"$@\""
-  macro add echo "echo $@"
+  macro add commit "git commit -m \"\$@\""
 
   # Complex commands
   macro add deploy "npm run build && npm run deploy"
   macro add fresh "rm -rf node_modules && npm install"`,
-	Args: cobra.MinimumNArgs(2),
+	Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cwd, err := os.Getwd()
 		if err != nil {
@@ -50,7 +54,23 @@ Quotes are important for commands with spaces or special characters.`,
 		}
 
 		macroName := args[0]
-		command := strings.Join(args[1:], " ")
+		var command string
+
+		// If no command provided or only whitespace, prompt for interactive input
+		if len(args) < 2 {
+			fmt.Print("Enter command: ")
+			reader := bufio.NewReader(os.Stdin)
+			command, err = reader.ReadString('\n')
+			if err != nil {
+				return fmt.Errorf("failed to read command: %w", err)
+			}
+			command = strings.TrimSpace(command)
+			if command == "" {
+				return fmt.Errorf("command cannot be empty")
+			}
+		} else {
+			command = strings.Join(args[1:], " ")
+		}
 
 		macro, err := store.CreateMacro(project.ID, macroName, command)
 		if err != nil {
