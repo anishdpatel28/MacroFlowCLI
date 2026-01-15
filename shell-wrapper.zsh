@@ -8,27 +8,25 @@
 #   (or paste the function directly into your ~/.zshrc)
 
 macro() {
-    # Capture output and execute the macro
+    # Run the macro binary and capture output
     local output
     output=$(/usr/local/bin/macro "$@" 2>&1)
     local exit_code=$?
     
-    # Check if this was a macro execution (not a management command)
+    # Check if this was a macro execution (look for % command marker)
     if echo "$output" | grep -q "^% "; then
-        # Extract the command that was executed
+        # Extract the command to execute
         local cmd=$(echo "$output" | grep "^% " | sed 's/^% //')
         
-        # Check if it's a cd command
-        if [[ "$cmd" =~ ^cd[[:space:]]+(.*) ]]; then
-            local target="${match[1]}"
-            # Execute cd in the current shell
-            echo "$output"
-            builtin cd "$target" 2>/dev/null || builtin cd
-            return $?
-        fi
+        # Show what we're executing
+        echo "$output"
+        
+        # Execute the command in the current shell
+        eval "$cmd"
+        return $?
     fi
     
-    # For non-cd commands or management commands, just show output
+    # For management commands (init, add, list, etc.), just show output
     echo "$output"
     return $exit_code
 }

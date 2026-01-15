@@ -29,6 +29,48 @@ go build -o macro main.go
 sudo cp macro /usr/local/bin/macro
 ```
 
+### Shell Wrapper for `cd` Macros (Recommended)
+
+To make `cd` macros work (change your actual directory), add this function to your shell config:
+
+**Zsh (~/.zshrc):**
+```bash
+macro() {
+    local output=$(/usr/local/bin/macro "$@" 2>&1)
+    local exit_code=$?
+    if echo "$output" | grep -q "^% "; then
+        local cmd=$(echo "$output" | grep "^% " | sed 's/^% //')
+        if [[ "$cmd" =~ ^cd[[:space:]]+(.*) ]]; then
+            echo "$output"
+            builtin cd "${match[1]}" 2>/dev/null || builtin cd
+            return $?
+        fi
+    fi
+    echo "$output"
+    return $exit_code
+}
+```
+
+**Bash (~/.bashrc):**
+```bash
+macro() {
+    local output=$(/usr/local/bin/macro "$@" 2>&1)
+    local exit_code=$?
+    if echo "$output" | grep -q "^% "; then
+        local cmd=$(echo "$output" | grep "^% " | sed 's/^% //')
+        if [[ "$cmd" =~ ^cd[[:space:]]+(.*) ]]; then
+            echo "$output"
+            builtin cd "${BASH_REMATCH[1]}" 2>/dev/null || builtin cd
+            return $?
+        fi
+    fi
+    echo "$output"
+    return $exit_code
+}
+```
+
+Reload: `source ~/.zshrc` or `source ~/.bashrc`
+
 ## Quick Start
 
 ```bash
