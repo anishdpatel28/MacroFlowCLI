@@ -3,8 +3,8 @@ module github.com/anish/macroflow
 go 1.21
 
 require (
-	github.com/spf13/cobra v1.8.0
 	github.com/google/uuid v1.5.0
+	github.com/spf13/cobra v1.8.0
 )
 
 require (
