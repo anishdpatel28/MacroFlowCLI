@@ -14,10 +14,20 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete macro(s) or a project by ID",
 	Long: `Delete one or more macros by their IDs, or delete a project with --project flag.
 
-Examples:
-  macro delete abc-123                    # Delete a single macro
-  macro delete abc-123 def-456 ghi-789   # Delete multiple macros
-  macro delete abc-123 --project         # Delete a project and all its macros`,
+To get IDs, use 'macro list' to see all macros with their IDs.
+
+Note: Deleting a project will also delete all its macros.`,
+	Example: `  # Delete a single macro by ID
+  macro delete abc-123-def-456
+
+  # Delete multiple macros at once
+  macro delete id1 id2 id3
+
+  # Delete a project (will prompt for confirmation)
+  macro delete project-id --project
+
+  # Delete by name (easier than ID)
+  macro delete-name dev`,
 	Aliases: []string{"rm", "remove"},
 	Args:    cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -97,7 +107,14 @@ func deleteProjectByID(id string) error {
 var deleteNameCmd = &cobra.Command{
 	Use:   "delete-name <macro-name>",
 	Short: "Delete a macro by name in the current project",
-	Args:  cobra.ExactArgs(1),
+	Long: `Delete a macro by its name in the current project.
+
+This is easier than using 'delete' with an ID when you know the macro name.`,
+	Example: `  # Delete a macro by name
+  macro delete-name dev
+  macro delete-name test
+  macro delete-name my-old-macro`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cwd, err := os.Getwd()
 		if err != nil {

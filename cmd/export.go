@@ -11,12 +11,23 @@ import (
 var exportFile string
 
 var exportCmd = &cobra.Command{
-	Use:   "export",
+	Use:   "export --file <path>",
 	Short: "Export all macros and projects to a JSON file",
 	Long: `Export all macros and projects to a JSON file for backup or sharing.
 
-Example:
-  macro export --file macros.json`,
+The exported file contains:
+  - All projects with their paths
+  - All macros with their commands
+  
+You can share this file with team members or use it as a backup.`,
+	Example: `  # Export to a file
+  macro export --file macros.json
+
+  # Export to backup directory
+  macro export --file ~/backups/macros-backup.json
+
+  # Export with date in filename
+  macro export --file ~/backups/macros-$(date +%Y%m%d).json`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if exportFile == "" {
 			return fmt.Errorf("--file flag is required")

@@ -19,10 +19,20 @@ var listCmd = &cobra.Command{
 	Short: "List macros and projects",
 	Long: `List macros in the current project, all macros, or all projects.
 
-Examples:
-  macro list              # List macros in current project
-  macro list --all        # List all macros across all projects
-  macro list --projects   # List all macro projects`,
+Use flags to control what is listed:
+  (no flags) - Macros in current project
+  --all      - All macros across all projects
+  --projects - All macro projects`,
+	Example: `  # List macros in current project
+  macro list
+
+  # List all macros across all projects (grouped by project)
+  macro list --all
+  macro list -a
+
+  # List all macro projects with details
+  macro list --projects
+  macro list -p`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if listProjects {
 			return listAllProjects()

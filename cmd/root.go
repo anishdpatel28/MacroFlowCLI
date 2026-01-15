@@ -19,18 +19,6 @@ var rootCmd = &cobra.Command{
 that work within specific directories and their subdirectories.`,
 	SilenceUsage:  true,
 	SilenceErrors: true,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// If no subcommand is provided, try to execute a macro
-		if len(args) == 0 {
-			return cmd.Help()
-		}
-
-		// Try to execute the macro
-		macroName := args[0]
-		macroArgs := args[1:]
-
-		return executeMacro(macroName, macroArgs)
-	},
 }
 
 func Execute() {
@@ -39,6 +27,28 @@ func Execute() {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: Failed to initialize storage: %v\n", err)
 		os.Exit(1)
+	}
+
+	// Check if first arg is a known command
+	if len(os.Args) > 1 {
+		cmdName := os.Args[1]
+
+		// List of known commands
+		knownCommands := map[string]bool{
+			"init": true, "add": true, "list": true, "delete": true,
+			"delete-name": true, "export": true, "import": true,
+			"help": true, "--help": true, "-h": true,
+		}
+
+		// If not a known command, try as macro
+		if !knownCommands[cmdName] {
+			macroErr := executeMacro(cmdName, os.Args[2:])
+			if macroErr != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", macroErr)
+				os.Exit(1)
+			}
+			return
+		}
 	}
 
 	if err := rootCmd.Execute(); err != nil {

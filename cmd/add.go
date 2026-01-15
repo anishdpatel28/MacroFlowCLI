@@ -13,12 +13,29 @@ var addCmd = &cobra.Command{
 	Short: "Add a new macro to the current project",
 	Long: `Add a new macro to the current project.
 
-The command can include parameters using $1, $2, etc. or $@ for all arguments.
+The command can include parameters:
+  $1, $2, $3... - Individual positional parameters
+  $@            - All parameters as a single string
 
-Examples:
+Quotes are important for commands with spaces or special characters.`,
+	Example: `  # Simple alias
   macro add dev "npm run dev"
+  macro add test "npm test"
+
+  # With single parameter
   macro add goto "cd $1"
-  macro add commit "git commit -m \"$@\""`,
+  macro add kill "kill -9 $1"
+
+  # With multiple parameters
+  macro add copy "cp $1 $2"
+  
+  # With all parameters
+  macro add commit "git commit -m \"$@\""
+  macro add echo "echo $@"
+
+  # Complex commands
+  macro add deploy "npm run build && npm run deploy"
+  macro add fresh "rm -rf node_modules && npm install"`,
 	Args: cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cwd, err := os.Getwd()

@@ -12,7 +12,17 @@ var initCmd = &cobra.Command{
 	Use:   "init [name]",
 	Short: "Initialize a new macro project in the current directory",
 	Long: `Initialize a new macro project in the current directory.
-All macros created in this project will be available in this directory and its subdirectories.`,
+All macros created in this project will be available in this directory and its subdirectories.
+
+The project name is optional - if not provided, the directory name will be used.`,
+	Example: `  # Initialize with directory name
+  macro init
+
+  # Initialize with custom name
+  macro init my-project
+
+  # Initialize in a specific project
+  cd ~/projects/website && macro init website`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cwd, err := os.Getwd()

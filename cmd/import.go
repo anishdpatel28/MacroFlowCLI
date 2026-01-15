@@ -15,15 +15,24 @@ var (
 )
 
 var importCmd = &cobra.Command{
-	Use:   "import",
+	Use:   "import --file <path>",
 	Short: "Import macros and projects from a JSON file",
 	Long: `Import macros and projects from a JSON file.
 
-By default, this will replace all existing data. Use --merge to add to existing data.
+Two modes:
+  Replace mode (default) - Replaces ALL existing macros and projects
+  Merge mode (--merge)   - Adds to existing data without removing anything
 
-Examples:
-  macro import --file macros.json           # Replace all data
-  macro import --file macros.json --merge   # Merge with existing data`,
+WARNING: Replace mode will delete all your current macros!`,
+	Example: `  # Replace all data (will prompt for confirmation)
+  macro import --file macros.json
+
+  # Merge with existing data (safer, no deletion)
+  macro import --file macros.json --merge
+  macro import --file macros.json -m
+
+  # Import from backup
+  macro import --file ~/backups/macros-backup.json --merge`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if importFile == "" {
 			return fmt.Errorf("--file flag is required")
