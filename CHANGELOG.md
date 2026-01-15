@@ -20,12 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform build support
 
 ### Features
-- 📁 Directory-scoped macros
-- 🎯 Project-based organization
-- 🔄 Parameter support for dynamic commands
-- 💾 JSON-based storage
-- 🔍 Smart project lookup
-- 📤 Import/Export capabilities
+- Directory-scoped macros
+- Project-based organization
+- Parameter support for dynamic commands
+- JSON-based storage
+- Smart project lookup
+- Import/Export capabilities
 
 ## [1.0.0] - TBD
 

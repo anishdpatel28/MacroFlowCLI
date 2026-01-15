@@ -4,12 +4,12 @@ A powerful command-line tool for creating directory-scoped command aliases (macr
 
 ## Features
 
-- 📁 **Directory-Scoped**: Macros are tied to specific directories and work in all subdirectories
-- 🎯 **Project-Based**: Organize macros into projects for better management
-- 🔄 **Parameter Support**: Use `$1`, `$2`, etc. or `$@` for dynamic command parameters
-- 💾 **Import/Export**: Share macro configurations or back them up
-- 🔍 **Smart Lookup**: Automatically finds the right project for your current directory
-- 🗂️ **Easy Management**: List, delete, and organize macros with simple commands
+- **Directory-Scoped**: Macros are tied to specific directories and work in all subdirectories
+- **Project-Based**: Organize macros into projects for better management
+- **Parameter Support**: Use `$1`, `$2`, etc. or `$@` for dynamic command parameters
+- **Import/Export**: Share macro configurations or back them up
+- **Smart Lookup**: Automatically finds the right project for your current directory
+- **Easy Management**: List, delete, and organize macros with simple commands
 
 ## Installation
 
