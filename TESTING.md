@@ -109,7 +109,7 @@ When running all tests, you should see:
 --- PASS: TestGetProjects (0.00s)
 ...
 PASS
-ok      github.com/anish/macroflow    0.XXXs
+ok      github.com/anishdpatel28/macroflow    0.XXXs
 ```
 
 ## Coverage Report

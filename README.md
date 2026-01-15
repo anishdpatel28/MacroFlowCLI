@@ -16,7 +16,7 @@ A powerful command-line tool for creating directory-scoped command aliases (macr
 ### macOS (Homebrew)
 
 ```bash
-brew tap <user>/macroflow
+brew tap anishdpatel28/macroflow
 brew install macroflow
 ```
 

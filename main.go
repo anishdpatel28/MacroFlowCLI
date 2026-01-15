@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/anish/macroflow/cmd"
+	"github.com/anishdpatel28/macroflow/cmd"
 )
 
 func main() {

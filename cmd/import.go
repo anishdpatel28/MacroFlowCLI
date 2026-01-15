@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/anish/macroflow/internal/models"
+	"github.com/anishdpatel28/macroflow/internal/models"
 	"github.com/spf13/cobra"
 )
 

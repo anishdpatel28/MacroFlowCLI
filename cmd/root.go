@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/anish/macroflow/internal/storage"
+	"github.com/anishdpatel28/macroflow/internal/storage"
 	"github.com/spf13/cobra"
 )
 

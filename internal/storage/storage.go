@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/anish/macroflow/internal/models"
+	"github.com/anishdpatel28/macroflow/internal/models"
 	"github.com/google/uuid"
 )
 

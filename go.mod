@@ -1,4 +1,4 @@
-module github.com/anish/macroflow
+module github.com/anishdpatel28/macroflow
 
 go 1.21
 

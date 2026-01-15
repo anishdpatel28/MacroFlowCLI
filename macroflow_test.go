@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/anish/macroflow/internal/models"
-	"github.com/anish/macroflow/internal/storage"
+	"github.com/anishdpatel28/macroflow/internal/models"
+	"github.com/anishdpatel28/macroflow/internal/storage"
 )
 
 // TestStorage holds the test storage instance
