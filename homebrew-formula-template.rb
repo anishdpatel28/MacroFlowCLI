@@ -1,11 +1,11 @@
 # This is a template for the Homebrew formula
-# To publish: Create a tap repository at github.com/<user>/homebrew-macroflow
+# To publish: Create a tap repository at github.com/anishdpatel28/homebrew-macroflow
 # Then add this formula as Formula/macroflow.rb
 
 class Macroflow < Formula
   desc "Directory-scoped command aliases for developers"
-  homepage "https://github.com/<user>/macroflow"
-  url "https://github.com/<user>/macroflow/archive/refs/tags/v1.0.0.tar.gz"
+  homepage "https://github.com/anishdpatel28/macroflow"
+  url "https://github.com/anishdpatel28/macroflow/archive/refs/tags/v1.0.0.tar.gz"
   sha256 "YOUR_SHA256_HERE"
   license "MIT"
 
@@ -25,7 +25,7 @@ end
 # Steps to publish on Homebrew:
 #
 # 1. Create a GitHub repository: homebrew-macroflow
-#    URL: https://github.com/<user>/homebrew-macroflow
+#    URL: https://github.com/anishdpatel28/homebrew-macroflow
 #
 # 2. Add this formula to: Formula/macroflow.rb
 #
@@ -39,5 +39,5 @@ end
 #    - Update the sha256 value above
 #
 # 5. Users can then install with:
-#    brew tap <user>/macroflow
+#    brew tap anishdpatel28/macroflow
 #    brew install macroflow

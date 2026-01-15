@@ -16,14 +16,14 @@ A powerful command-line tool for creating directory-scoped command aliases (macr
 ### macOS (Homebrew)
 
 ```bash
-brew tap anish/macroflow
+brew tap <user>/macroflow
 brew install macroflow
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/anish/MacroFlowCLI.git
+git clone https://github.com/anishdpatel28/MacroFlowCLI.git
 cd MacroFlowCLI
 go build -o macro main.go
 sudo cp macro /usr/local/bin/macro
@@ -105,7 +105,7 @@ macro add logs "docker-compose logs -f $1"
 
 ## Documentation
 
-For more examples and detailed guides, see [MacroFlowDocs](https://github.com/anish/MacroFlowDocs).
+For more examples and detailed guides, see [MacroFlowDocs](https://github.com/anishdpatel28/MacroFlowDocs).
 
 ## License
 
@@ -113,4 +113,4 @@ MIT License - See [LICENSE](LICENSE) file.
 
 ## Author
 
-Built with ❤️ by Anish
+Built with ❤️ by <user>
