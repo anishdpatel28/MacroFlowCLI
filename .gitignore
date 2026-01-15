@@ -28,6 +28,3 @@ go.work
 
 # MacroFlow data (for development/testing)
 .macroflow/
-
-# Go sum file (will be generated)
-go.sum
