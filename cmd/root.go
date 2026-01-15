@@ -92,7 +92,7 @@ func executeMacro(name string, args []string) error {
 	command = strings.ReplaceAll(command, "$@", strings.Join(args, " "))
 
 	// Execute the command
-	fmt.Printf("Executing: %s\n", command)
+	fmt.Printf("%% %s\n", command)
 
 	// Use shell to execute the command
 	shell := os.Getenv("SHELL")
