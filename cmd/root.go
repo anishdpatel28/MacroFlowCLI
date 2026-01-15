@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/anishdpatel28/macroflow/internal/storage"
@@ -91,24 +90,9 @@ func executeMacro(name string, args []string) error {
 	// Also support $@ for all arguments
 	command = strings.ReplaceAll(command, "$@", strings.Join(args, " "))
 
-	// Execute the command
+	// Output the command for the shell wrapper to execute
+	// The wrapper will run this in the current shell context
 	fmt.Printf("%% %s\n", command)
-
-	// Use shell to execute the command
-	shell := os.Getenv("SHELL")
-	if shell == "" {
-		shell = "/bin/sh"
-	}
-
-	cmd := exec.Command(shell, "-c", command)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Dir = cwd
-
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("command execution failed: %w", err)
-	}
 
 	return nil
 }
