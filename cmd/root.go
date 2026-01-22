@@ -81,7 +81,9 @@ func executeMacro(name string, args []string) error {
 	}
 
 	// Replace parameters in command
-	command := macro.Command
+	// First, unescape any \$ that users typed to prevent shell expansion
+	command := strings.ReplaceAll(macro.Command, "\\$", "$")
+
 	for i, arg := range args {
 		placeholder := fmt.Sprintf("$%d", i+1)
 		command = strings.ReplaceAll(command, placeholder, arg)
