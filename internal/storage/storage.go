@@ -43,9 +43,7 @@ func New() (*Storage, error) {
 		db:     &models.Database{},
 	}
 
-	// Load existing database or create new one
 	if err := s.load(); err != nil {
-		// If file doesn't exist, initialize empty database
 		if os.IsNotExist(err) {
 			s.db.Projects = []models.Project{}
 			s.db.Macros = []models.Macro{}
@@ -114,17 +112,13 @@ func (s *Storage) GetProjects() []models.Project {
 func (s *Storage) GetProjectByPath(currentPath string) *models.Project {
 	var matchedProject *models.Project
 	maxDepth := -1
-
-	// Normalize the current path
 	currentPath = filepath.Clean(currentPath)
 
 	for i := range s.db.Projects {
 		project := &s.db.Projects[i]
 		projectPath := filepath.Clean(project.Path)
 
-		// Check if current path is within or equal to project path
 		if currentPath == projectPath || strings.HasPrefix(currentPath, projectPath+string(os.PathSeparator)) {
-			// Calculate depth (number of path separators)
 			depth := strings.Count(projectPath, string(os.PathSeparator))
 			if depth > maxDepth {
 				maxDepth = depth
@@ -138,7 +132,6 @@ func (s *Storage) GetProjectByPath(currentPath string) *models.Project {
 
 // DeleteProject deletes a project and all its macros
 func (s *Storage) DeleteProject(projectID string) error {
-	// Find and remove project
 	found := false
 	for i, p := range s.db.Projects {
 		if p.ID == projectID {
@@ -152,7 +145,6 @@ func (s *Storage) DeleteProject(projectID string) error {
 		return fmt.Errorf("project not found")
 	}
 
-	// Remove all macros associated with this project
 	var filteredMacros []models.Macro
 	for _, m := range s.db.Macros {
 		if m.ProjectID != projectID {
@@ -166,7 +158,6 @@ func (s *Storage) DeleteProject(projectID string) error {
 
 // CreateMacro creates a new macro
 func (s *Storage) CreateMacro(projectID, name, command string) (*models.Macro, error) {
-	// Verify project exists
 	projectExists := false
 	for _, p := range s.db.Projects {
 		if p.ID == projectID {
@@ -179,7 +170,6 @@ func (s *Storage) CreateMacro(projectID, name, command string) (*models.Macro, e
 		return nil, fmt.Errorf("project not found")
 	}
 
-	// Check if macro with same name exists in project
 	for _, m := range s.db.Macros {
 		if m.ProjectID == projectID && m.Name == name {
 			return nil, fmt.Errorf("macro '%s' already exists in this project", name)
@@ -268,7 +258,6 @@ func (s *Storage) ImportData(data *models.Database, merge bool) error {
 	if !merge {
 		s.db = data
 	} else {
-		// Merge projects (skip duplicates by path)
 		existingPaths := make(map[string]bool)
 		for _, p := range s.db.Projects {
 			existingPaths[p.Path] = true
@@ -280,7 +269,6 @@ func (s *Storage) ImportData(data *models.Database, merge bool) error {
 			}
 		}
 
-		// Merge macros (regenerate IDs to avoid conflicts)
 		for _, m := range data.Macros {
 			m.ID = uuid.New().String()
 			s.db.Macros = append(s.db.Macros, m)
