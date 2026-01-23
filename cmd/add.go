@@ -47,15 +47,13 @@ Quotes are important for commands with spaces or special characters.`,
 			return fmt.Errorf("failed to get current directory: %w", err)
 		}
 
-		// Find the project for this directory
 		project := store.GetProjectByPath(cwd)
 		if project == nil {
 			return fmt.Errorf("no macro project found for current directory\nUse 'macro init' to create one")
 		}
 
 		macroName := args[0]
-		
-		// Check for reserved command names
+
 		reservedNames := []string{
 			"init", "add", "list", "delete", "delete-name",
 			"export", "import", "help", "version",
@@ -65,10 +63,9 @@ Quotes are important for commands with spaces or special characters.`,
 				return fmt.Errorf("cannot create macro with reserved name '%s'\nReserved names: %s", macroName, strings.Join(reservedNames, ", "))
 			}
 		}
-		
+
 		var command string
 
-		// If no command provided or only whitespace, prompt for interactive input
 		if len(args) < 2 {
 			fmt.Print("Enter command: ")
 			reader := bufio.NewReader(os.Stdin)
