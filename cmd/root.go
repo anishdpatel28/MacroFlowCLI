@@ -28,18 +28,15 @@ func Execute() {
 		os.Exit(1)
 	}
 
-	// Check if first arg is a known command
 	if len(os.Args) > 1 {
 		cmdName := os.Args[1]
 
-		// List of known commands
 		knownCommands := map[string]bool{
 			"init": true, "add": true, "list": true, "delete": true,
 			"delete-name": true, "export": true, "import": true,
 			"help": true, "--help": true, "-h": true,
 		}
 
-		// If not a known command, try as macro
 		if !knownCommands[cmdName] {
 			macroErr := executeMacro(cmdName, os.Args[2:])
 			if macroErr != nil {
@@ -62,36 +59,29 @@ func init() {
 
 // executeMacro executes a macro by name
 func executeMacro(name string, args []string) error {
-	// Get current working directory
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
-	// Find the project for this directory
 	project := store.GetProjectByPath(cwd)
 	if project == nil {
 		return fmt.Errorf("no macro project found for current directory\nUse 'macro init' to create one")
 	}
 
-	// Find the macro
 	macro := store.GetMacroByName(project.ID, name)
 	if macro == nil {
 		return fmt.Errorf("macro '%s' not found in project '%s'\nUse 'macro list' to see available macros", name, project.Name)
 	}
 
-	// Replace parameters in command
 	command := macro.Command
 	for i, arg := range args {
 		placeholder := fmt.Sprintf("$%d", i+1)
 		command = strings.ReplaceAll(command, placeholder, arg)
 	}
-
-	// Also support $@ for all arguments
 	command = strings.ReplaceAll(command, "$@", strings.Join(args, " "))
 
-	// Output the command for the shell wrapper to execute
-	// The wrapper will run this in the current shell context
+	// Shell wrapper will execute this command in the current shell
 	fmt.Printf("%% %s\n", command)
 
 	return nil
