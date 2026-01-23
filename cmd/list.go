@@ -75,7 +75,6 @@ func listCurrentProjectMacros() error {
 		return nil
 	}
 
-	// Sort macros by name
 	sort.Slice(macros, func(i, j int) bool {
 		return macros[i].Name < macros[j].Name
 	})
@@ -101,13 +100,11 @@ func listAllMacros() error {
 		return nil
 	}
 
-	// Create project lookup map
 	projectMap := make(map[string]string)
 	for _, p := range projects {
 		projectMap[p.ID] = p.Name
 	}
 
-	// Group macros by project
 	macrosByProject := make(map[string][]string)
 	for _, m := range allMacros {
 		projectName := projectMap[m.ProjectID]
@@ -121,7 +118,6 @@ func listAllMacros() error {
 	fmt.Printf("All Macros (%d total):\n", len(allMacros))
 	fmt.Println(strings.Repeat("=", 80))
 
-	// Sort project names
 	var projectNames []string
 	for name := range macrosByProject {
 		projectNames = append(projectNames, name)
@@ -147,7 +143,6 @@ func listAllProjects() error {
 		return nil
 	}
 
-	// Sort projects by name
 	sort.Slice(projects, func(i, j int) bool {
 		return projects[i].Name < projects[j].Name
 	})
