@@ -30,7 +30,6 @@ The project name is optional - if not provided, the directory name will be used.
 			return fmt.Errorf("failed to get current directory: %w", err)
 		}
 
-		// Use directory name as project name if not provided
 		name := filepath.Base(cwd)
 		if len(args) > 0 {
 			name = args[0]
