@@ -64,7 +64,6 @@ func deleteMacrosByIDs(ids []string) error {
 }
 
 func deleteProjectByID(id string) error {
-	// Get project info before deleting
 	projects := store.GetProjects()
 	var projectName string
 	var macroCount int
@@ -82,7 +81,6 @@ func deleteProjectByID(id string) error {
 		return fmt.Errorf("project not found with ID: %s", id)
 	}
 
-	// Confirm deletion
 	fmt.Printf("Are you sure you want to delete project '%s'?\n", projectName)
 	fmt.Printf("This will also delete %d macro(s).\n", macroCount)
 	fmt.Print("Type 'yes' to confirm: ")
