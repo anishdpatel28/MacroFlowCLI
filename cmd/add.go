@@ -54,6 +54,18 @@ Quotes are important for commands with spaces or special characters.`,
 		}
 
 		macroName := args[0]
+		
+		// Check for reserved command names
+		reservedNames := []string{
+			"init", "add", "list", "delete", "delete-name",
+			"export", "import", "help", "version",
+		}
+		for _, reserved := range reservedNames {
+			if macroName == reserved {
+				return fmt.Errorf("cannot create macro with reserved name '%s'\nReserved names: %s", macroName, strings.Join(reservedNames, ", "))
+			}
+		}
+		
 		var command string
 
 		// If no command provided or only whitespace, prompt for interactive input
